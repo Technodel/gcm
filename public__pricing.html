@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pricing — GCM Galaxy Competitor Monitor</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue: #3b82f6;
+      --purple: #8b5cf6;
+      --pink: #ec4899;
+      --bg: #030712;
+      --card: rgba(17, 24, 39, 0.7);
+      --card-hover: rgba(31, 41, 55, 0.8);
+      --border: rgba(139, 92, 246, 0.15);
+      --border-hover: rgba(139, 92, 246, 0.4);
+      --txt: #f8fafc;
+      --txt2: #94a3b8;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      font-family: 'Outfit', sans-serif;
+      color: var(--txt);
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    body::before {
+      content: ''; position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
+      background: radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.05) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 40%);
+      z-index: -1; pointer-events: none;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 8vw; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      background: rgba(3, 7, 18, 0.6);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .nav-logo-img {
+      width: 40px; height: 40px; border-radius: 50%;
+      object-fit: cover; object-position: center;
+      border: 2px solid rgba(248, 201, 92, 0.5);
+      box-shadow: 0 0 16px rgba(248, 201, 92, 0.35);
+      flex-shrink: 0;
+    }
+    .nav-logo-text-wrap { display: flex; flex-direction: column; line-height: 1.1; }
+    .nav-logo-text {
+      font-size: 1.3rem; font-weight: 900;
+      background: linear-gradient(135deg, #f8c95c, #fff);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+    .nav-logo-sub { font-size: 0.65rem; color: var(--txt2); font-weight: 500; letter-spacing: 0.3px; }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-links a { color: var(--txt2); text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: 0.3s; }
+    .nav-links a:hover { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+    .nav-cta {
+      padding: 10px 24px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      color: #fff !important; font-weight: 600 !important;
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); transition: 0.3s !important;
+    }
+    .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(139, 92, 246, 0.5) !important; }
+
+    /* MAIN */
+    main { flex: 1; }
+
+    /* FOOTER */
+    footer {
+      padding: 40px 8vw; border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: auto;
+    }
+    .footer-logo { font-size: 1.2rem; font-weight: 800; color: var(--txt2); }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { color: var(--txt2); text-decoration: none; font-size: 0.9rem; transition: 0.2s; }
+    .footer-links a:hover { color: #fff; }
+
+    
+    .pricing-hero { text-align: center; padding: 80px 20px 40px; }
+    .pricing-hero h1 { font-size: 3.5rem; font-weight: 900; margin-bottom: 20px; }
+    .pricing-hero p { color: var(--txt2); font-size: 1.2rem; }
+    .pricing-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; padding: 20px 8vw 100px; }
+    .plan-card { width: 340px; background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 40px; transition: 0.4s; position: relative; overflow: hidden; backdrop-filter: blur(10px); }
+    .plan-card:hover { transform: translateY(-10px); border-color: var(--blue); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+    .plan-card.popular { border-color: var(--purple); background: linear-gradient(180deg, rgba(139,92,246,0.1) 0%, var(--card) 100%); }
+    .plan-card.popular::before { content: 'MOST POPULAR'; position: absolute; top: 20px; right: -35px; background: var(--purple); color: #fff; font-size: 0.7rem; font-weight: 800; padding: 6px 40px; transform: rotate(45deg); letter-spacing: 1px; }
+    .plan-name { font-size: 1.6rem; font-weight: 800; margin-bottom: 10px; }
+    .plan-price { font-size: 3.5rem; font-weight: 900; margin-bottom: 20px; display: flex; align-items: baseline; gap: 5px; }
+    .plan-price span { font-size: 1rem; color: var(--txt2); font-weight: 500; }
+    .plan-features { list-style: none; margin-bottom: 40px; }
+    .plan-features li { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px; color: #cbd5e1; font-size: 0.95rem; }
+    .plan-features li i { color: var(--blue); margin-top: 4px; font-size: 0.9rem; }
+    .btn-plan { width: 100%; padding: 14px; border-radius: 12px; text-align: center; text-decoration: none; font-weight: 700; font-size: 1.1rem; display: block; transition: 0.3s; }
+    .btn-plan-outline { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--border); }
+    .btn-plan-outline:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
+    .btn-plan-solid { background: linear-gradient(135deg, var(--blue), var(--purple)); color: #fff; border: none; box-shadow: 0 8px 20px rgba(139,92,246,0.4); }
+    .btn-plan-solid:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(139,92,246,0.6); }
+    
+
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/landing" class="nav-logo">
+      <img src="/galaxy.png" alt="Galaxy" class="nav-logo-img">
+      <div class="nav-logo-text-wrap">
+        <span class="nav-logo-text">GCM</span>
+        <span class="nav-logo-sub">Galaxy Competitor Monitor</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="/landing#features">Features</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+      <a href="/login" class="nav-cta">Dashboard</a>
+    </div>
+  </nav>
+
+  <main>
+    
+    <div class="pricing-hero">
+      <h1>Simple, Transparent Pricing</h1>
+      <p>Powerful price intelligence for businesses of all sizes.</p>
+    </div>
+    <div class="pricing-grid" id="pricing-container">
+      <!-- Injected by JS -->
+      <div style="text-align:center;width:100%;"><i class="fa-solid fa-circle-notch fa-spin fa-2x"></i></div>
+    </div>
+    
+  </main>
+
+  <footer>
+    <div class="footer-logo">GCM — Galaxy Competitor Monitor</div>
+    <div class="footer-links">
+      <a href="/landing">Home</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+    </div>
+  </footer>
+
+  <script src="/branding.js"></script>
+  
+    <script>
+      async function loadPricing() {
+        try {
+          const res = await fetch('/api/pricing');
+          const plans = await res.json();
+          const container = document.getElementById('pricing-container');
+          container.innerHTML = '';
+          
+          plans.forEach((plan, idx) => {
+             const isPopular = idx === 1; // 2nd plan is popular
+             let featuresHtml = plan.features.map(f => `<li><i class="fa-solid fa-check"></i> ${f}</li>`).join('');
+             
+             let btnClass = isPopular ? 'btn-plan-solid' : 'btn-plan-outline';
+             let cardClass = isPopular ? 'plan-card popular' : 'plan-card';
+
+             container.innerHTML += `
+               <div class="${cardClass}">
+                 <div class="plan-name">${plan.name}</div>
+                 <div class="plan-price">$${plan.price} <span>/ month</span></div>
+                 <ul class="plan-features">
+                   ${featuresHtml}
+                 </ul>
+                 <a href="/login" class="btn-plan ${btnClass}">Choose ${plan.name}</a>
+               </div>
+             `;
+          });
+        } catch(e) {
+          console.error(e);
+        }
+      }
+      loadPricing();
+    </script>
+    
+</body>
+</html>

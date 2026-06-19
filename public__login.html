@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TCM — Sign In</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    nav{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;justify-content:space-between;
+      padding:14px 6vw;backdrop-filter:blur(20px);background:rgba(10,14,26,.7);
+      border-bottom:1px solid rgba(99,179,237,.1)}
+    .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .nav-logo-icon{width:34px;height:34px;background:linear-gradient(135deg,#38bdf8,#818cf8);
+      border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem}
+    .nav-logo-text{font-size:1.1rem;font-weight:800;background:linear-gradient(135deg,#38bdf8,#818cf8);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .nav-links{display:flex;align-items:center;gap:22px}
+    .nav-links a{color:#64748b;text-decoration:none;font-size:.85rem;font-weight:500;transition:.2s}
+    .nav-links a:hover{color:#f1f5f9}
+    body{background:#0a0e1a;font-family:'Inter',sans-serif;color:#f1f5f9;min-height:100vh;
+      display:flex;align-items:center;justify-content:center;
+      background-image:radial-gradient(ellipse at 20% 20%,rgba(56,189,248,.08) 0%,transparent 50%),
+        radial-gradient(ellipse at 80% 80%,rgba(129,140,248,.06) 0%,transparent 50%)}
+    .card{background:rgba(17,24,39,.85);border:1px solid rgba(99,179,237,.18);border-radius:22px;
+      padding:2.5rem 2.25rem;width:100%;max-width:420px;backdrop-filter:blur(20px);
+      box-shadow:0 30px 80px rgba(0,0,0,.5)}
+    .logo{display:flex;align-items:center;gap:14px;margin-bottom:2rem;justify-content:center}
+    .logo-icon{width:52px;height:52px;background:linear-gradient(135deg,#38bdf8,#818cf8);
+      border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;
+      box-shadow:0 8px 24px rgba(56,189,248,.3)}
+    .logo-text h1{font-size:1.7rem;font-weight:800;background:linear-gradient(135deg,#38bdf8,#818cf8);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .logo-text p{font-size:.78rem;color:#64748b;margin-top:2px}
+    .tabs{display:flex;gap:0;margin-bottom:1.75rem;background:rgba(255,255,255,.04);
+      border-radius:10px;padding:3px}
+    .tab{flex:1;padding:9px;text-align:center;border-radius:8px;font-size:.85rem;font-weight:600;
+      cursor:pointer;transition:.2s;color:#64748b;border:none;background:none;font-family:'Inter',sans-serif}
+    .tab.active{background:linear-gradient(135deg,#38bdf8,#818cf8);color:#fff;
+      box-shadow:0 4px 14px rgba(56,189,248,.3)}
+    .form-group{margin-bottom:1.1rem}
+    label{display:block;font-size:.75rem;font-weight:600;color:#94a3b8;
+      text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}
+    .input-wrap{position:relative}
+    .input-wrap i{position:absolute;left:14px;top:50%;transform:translateY(-50%);
+      color:#475569;font-size:.9rem}
+    input{width:100%;padding:12px 14px 12px 40px;background:#0f172a;
+      border:1px solid rgba(99,179,237,.15);border-radius:11px;color:#f1f5f9;
+      font-family:'Inter',sans-serif;font-size:.92rem;outline:none;transition:.25s}
+    input:focus{border-color:#38bdf8;box-shadow:0 0 0 3px rgba(56,189,248,.15)}
+    .btn{width:100%;padding:13px;background:linear-gradient(135deg,#38bdf8,#818cf8);
+      border:none;border-radius:11px;color:#fff;font-family:'Inter',sans-serif;
+      font-size:.95rem;font-weight:700;cursor:pointer;transition:.25s;
+      box-shadow:0 5px 18px rgba(56,189,248,.3);display:flex;align-items:center;justify-content:center;gap:8px}
+    .btn:hover{transform:translateY(-2px);box-shadow:0 9px 26px rgba(56,189,248,.4)}
+    .btn:disabled{opacity:.4;pointer-events:none;transform:none}
+    .error-msg{background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.25);
+      border-radius:9px;padding:10px 14px;font-size:.83rem;color:#f87171;margin-bottom:1rem;display:none}
+    .success-msg{background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.25);
+      border-radius:9px;padding:10px 14px;font-size:.83rem;color:#34d399;margin-bottom:1rem;display:none}
+    .divider{text-align:center;color:#334155;font-size:.78rem;margin:1.2rem 0;position:relative}
+    .divider::before,.divider::after{content:'';position:absolute;top:50%;width:43%;height:1px;
+      background:rgba(99,179,237,.1)}
+    .divider::before{left:0}.divider::after{right:0}
+    .form-section{display:none}.form-section.active{display:block}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/landing" class="nav-logo">
+    <div class="nav-logo-icon">📡</div>
+    <span class="nav-logo-text">TCM</span>
+  </a>
+  <div class="nav-links">
+    <a href="/landing">Home</a>
+    <a href="/about">About</a>
+    <a href="/contact">Contact</a>
+  </div>
+</nav>
+<div class="card">
+  <div class="logo">
+    <div class="logo-icon">📡</div>
+    <div class="logo-text">
+      <h1>TCM</h1>
+      <p>Competitor Price Monitor</p>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" id="tabLogin" onclick="switchTab('login')">Sign In</button>
+    <button class="tab" id="tabSignup" onclick="switchTab('signup')">Request Access</button>
+  </div>
+
+  <div id="errorMsg" class="error-msg"></div>
+  <div id="successMsg" class="success-msg"></div>
+
+  <!-- LOGIN -->
+  <div class="form-section active" id="sectionLogin">
+    <div class="form-group">
+      <label>Username</label>
+      <div class="input-wrap">
+        <i class="fa-solid fa-user"></i>
+        <input type="text" id="loginUser" placeholder="your username" autocomplete="username"
+          onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <div class="input-wrap">
+        <i class="fa-solid fa-lock"></i>
+        <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password"
+          onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+    </div>
+    <button class="btn" id="loginBtn" onclick="doLogin()">
+      <i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In
+    </button>
+  </div>
+
+  <!-- SIGNUP REQUEST -->
+  <div class="form-section" id="sectionSignup">
+    <div class="form-group">
+      <label>Choose a Username</label>
+      <div class="input-wrap">
+        <i class="fa-solid fa-user"></i>
+        <input type="text" id="signupUser" placeholder="at least 3 characters"
+          onkeydown="if(event.key==='Enter')doSignup()">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Choose a Password</label>
+      <div class="input-wrap">
+        <i class="fa-solid fa-lock"></i>
+        <input type="password" id="signupPass" placeholder="at least 6 characters"
+          onkeydown="if(event.key==='Enter')doSignup()">
+      </div>
+    </div>
+    <button class="btn" id="signupBtn" onclick="doSignup()">
+      <i class="fa-solid fa-paper-plane"></i> Submit Request
+    </button>
+    <div class="divider">Your request will be reviewed by an admin</div>
+  </div>
+</div>
+
+<script>
+function switchTab(t) {
+  document.getElementById('sectionLogin').className  = 'form-section' + (t==='login' ?' active':'');
+  document.getElementById('sectionSignup').className = 'form-section' + (t==='signup'?' active':'');
+  document.getElementById('tabLogin').className  = 'tab' + (t==='login' ?' active':'');
+  document.getElementById('tabSignup').className = 'tab' + (t==='signup'?' active':'');
+  hideMsg();
+}
+
+function showError(msg) {
+  const el = document.getElementById('errorMsg');
+  el.textContent = msg; el.style.display = 'block';
+  document.getElementById('successMsg').style.display = 'none';
+}
+function showSuccess(msg) {
+  const el = document.getElementById('successMsg');
+  el.textContent = msg; el.style.display = 'block';
+  document.getElementById('errorMsg').style.display = 'none';
+}
+function hideMsg() {
+  document.getElementById('errorMsg').style.display = 'none';
+  document.getElementById('successMsg').style.display = 'none';
+}
+
+async function doLogin() {
+  const username = document.getElementById('loginUser').value.trim();
+  const password = document.getElementById('loginPass').value;
+  if (!username || !password) return showError('Enter username and password');
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Signing in…';
+  try {
+    const r = await fetch('/api/auth/login', {
+      method:'POST', credentials:'include',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ username, password })
+    }).then(r => r.json());
+    if (r.error) { showError(r.error); return; }
+    window.location.href = r.user.role === 'admin' ? '/admin' : '/';
+  } catch(e) { showError('Server error — try again'); }
+  finally { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In'; }
+}
+
+async function doSignup() {
+  const username = document.getElementById('signupUser').value.trim();
+  const password = document.getElementById('signupPass').value;
+  if (!username || !password) return showError('Fill in all fields');
+  const btn = document.getElementById('signupBtn');
+  btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting…';
+  try {
+    const r = await fetch('/api/auth/signup-request', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ username, password })
+    }).then(r => r.json());
+    if (r.error) { showError(r.error); return; }
+    showSuccess('Request submitted! An admin will review and activate your account.');
+    document.getElementById('signupUser').value = '';
+    document.getElementById('signupPass').value = '';
+  } catch(e) { showError('Server error — try again'); }
+  finally { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Request'; }
+}
+</script>
+</body>
+</html>

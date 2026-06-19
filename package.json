@@ -1,0 +1,33 @@
+{
+  "name": "competitor-monitor",
+  "version": "2.0.0",
+  "description": "Competitor Price Monitor — Track competitor prices across OLX, Facebook, and custom websites",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "scraper",
+    "price-monitor",
+    "competitor"
+  ],
+  "author": "Technodel",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "axios": "^1.7.9",
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^11.10.0",
+    "camoufox": "^0.1.19",
+    "cheerio": "^1.2.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "fs-extra": "^11.3.4",
+    "jsonwebtoken": "^9.0.2",
+    "node-fetch": "^2.7.0",
+    "puppeteer-core": "^22.0.0"
+  }
+}

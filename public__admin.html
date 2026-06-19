@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TCM Admin</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root{
+      --bg:#0a0e1a;--bg2:#111827;--card:rgba(17,24,39,.75);
+      --border:rgba(99,179,237,.15);--border-h:rgba(99,179,237,.35);
+      --txt:#f1f5f9;--txt2:#94a3b8;--muted:#64748b;
+      --accent:#38bdf8;--purple:#818cf8;--green:#34d399;--orange:#fbbf24;--red:#f87171;
+      --grad:linear-gradient(135deg,#38bdf8 0%,#818cf8 100%);
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:var(--bg);font-family:'Inter',sans-serif;color:var(--txt);display:flex;min-height:100vh}
+    /* SIDEBAR */
+    .sidebar{width:220px;background:var(--card);border-right:1px solid var(--border);
+      display:flex;flex-direction:column;flex-shrink:0;position:sticky;top:0;height:100vh}
+    .sidebar-brand{padding:1.4rem 1.2rem;border-bottom:1px solid var(--border)}
+    .sidebar-brand h1{font-size:1.25rem;font-weight:800;background:var(--grad);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .sidebar-brand p{font-size:.7rem;color:var(--muted);margin-top:2px}
+    .nav{flex:1;padding:.75rem .6rem;display:flex;flex-direction:column;gap:3px}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;
+      cursor:pointer;font-size:.85rem;font-weight:600;color:var(--txt2);transition:.2s;border:none;
+      background:none;width:100%;text-align:left;font-family:'Inter',sans-serif}
+    .nav-item:hover{background:rgba(56,189,248,.07);color:var(--txt)}
+    .nav-item.active{background:rgba(56,189,248,.12);color:var(--accent)}
+    .nav-item i{width:16px;text-align:center;font-size:.9rem}
+    .nav-badge{margin-left:auto;background:var(--red);color:#fff;border-radius:8px;
+      padding:1px 6px;font-size:.65rem;font-weight:800}
+    .sidebar-foot{padding:.75rem;border-top:1px solid var(--border)}
+    /* MAIN */
+    .main{flex:1;overflow-y:auto;padding:1.75rem 2rem}
+    .page{display:none}.page.active{display:block}
+    .page-title{font-size:1.3rem;font-weight:800;margin-bottom:1.5rem;
+      display:flex;align-items:center;gap:10px}
+    .page-title i{color:var(--accent)}
+    /* STATS */
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:1.75rem}
+    .stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.1rem 1.4rem}
+    .stat-val{font-size:1.9rem;font-weight:800}
+    .stat-lbl{color:var(--txt2);font-size:.78rem;margin-top:4px}
+    .stat-icon{font-size:1.1rem;margin-bottom:8px}
+    /* PANEL */
+    .panel{background:var(--card);border:1px solid var(--border);border-radius:16px;
+      overflow:hidden;margin-bottom:1.5rem}
+    .panel-head{display:flex;align-items:center;justify-content:space-between;
+      padding:1rem 1.4rem;border-bottom:1px solid var(--border)}
+    .panel-head h3{font-size:.95rem;font-weight:700;display:flex;align-items:center;gap:8px}
+    .panel-body{padding:1.25rem 1.4rem}
+    /* TABLE */
+    table{width:100%;border-collapse:collapse}
+    thead th{padding:10px 12px;text-align:left;font-size:.72rem;text-transform:uppercase;
+      letter-spacing:.5px;color:var(--muted);border-bottom:1px solid var(--border);white-space:nowrap}
+    tbody td{padding:11px 12px;font-size:.85rem;border-bottom:1px solid rgba(99,179,237,.05)}
+    tbody tr:last-child td{border:none}
+    tbody tr:hover{background:rgba(56,189,248,.03)}
+    /* BADGES */
+    .badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:6px;
+      font-size:.72rem;font-weight:700;white-space:nowrap}
+    .badge-green{background:rgba(52,211,153,.15);color:var(--green)}
+    .badge-orange{background:rgba(251,191,36,.15);color:var(--orange)}
+    .badge-red{background:rgba(248,113,113,.15);color:var(--red)}
+    .badge-blue{background:rgba(56,189,248,.15);color:var(--accent)}
+    .badge-purple{background:rgba(129,140,248,.15);color:var(--purple)}
+    /* BUTTONS */
+    .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:none;
+      border-radius:9px;font-family:'Inter',sans-serif;font-weight:600;font-size:.82rem;
+      cursor:pointer;transition:.2s;white-space:nowrap}
+    .btn-primary{background:var(--grad);color:#fff;box-shadow:0 4px 14px rgba(56,189,248,.25)}
+    .btn-primary:hover{opacity:.9;transform:translateY(-1px)}
+    .btn-ghost{background:rgba(99,179,237,.08);color:var(--txt2);border:1px solid var(--border)}
+    .btn-ghost:hover{color:var(--txt);border-color:var(--border-h)}
+    .btn-danger{background:rgba(248,113,113,.1);color:var(--red);border:1px solid rgba(248,113,113,.2)}
+    .btn-danger:hover{background:rgba(248,113,113,.2)}
+    .btn-success{background:rgba(52,211,153,.12);color:var(--green);border:1px solid rgba(52,211,153,.25)}
+    .btn-success:hover{background:rgba(52,211,153,.22)}
+    .btn-sm{padding:5px 11px;font-size:.75rem;border-radius:7px}
+    .btn:disabled{opacity:.4;pointer-events:none}
+    /* FORM */
+    .form-row{display:grid;gap:12px;margin-bottom:14px}
+    .form-row.cols2{grid-template-columns:1fr 1fr}
+    .form-group label{display:block;font-size:.73rem;font-weight:600;color:var(--txt2);
+      text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px}
+    input,select,textarea{width:100%;padding:10px 13px;background:#0f172a;
+      border:1px solid var(--border);border-radius:9px;color:var(--txt);
+      font-family:'Inter',sans-serif;font-size:.88rem;outline:none;transition:.2s}
+    input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(56,189,248,.12)}
+    select option{background:#111827}
+    /* MODAL */
+    .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9000;
+      align-items:center;justify-content:center;backdrop-filter:blur(5px)}
+    .modal.open{display:flex}
+    .modal-box{background:var(--bg2);border:1px solid var(--border-h);border-radius:16px;
+      width:92%;max-width:560px;max-height:88vh;display:flex;flex-direction:column;
+      box-shadow:0 25px 70px rgba(0,0,0,.6);overflow:hidden}
+    .modal-head{display:flex;align-items:center;justify-content:space-between;
+      padding:1.1rem 1.4rem;border-bottom:1px solid var(--border);flex-shrink:0}
+    .modal-head h2{font-size:1rem;font-weight:700}
+    .modal-body{padding:1.25rem 1.4rem;overflow-y:auto;flex:1}
+    .modal-foot{padding:.9rem 1.4rem;border-top:1px solid var(--border);
+      display:flex;justify-content:flex-end;gap:8px;flex-shrink:0}
+    /* TOAST */
+    .toast-wrap{position:fixed;bottom:18px;right:18px;z-index:99999;display:flex;flex-direction:column;gap:8px}
+    .toast{padding:11px 16px;border-radius:10px;font-weight:600;font-size:.83rem;
+      display:flex;align-items:center;gap:8px;backdrop-filter:blur(20px);animation:tIn .3s ease}
+    @keyframes tIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .toast.ok{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.3)}
+    .toast.err{background:rgba(248,113,113,.15);color:var(--red);border:1px solid rgba(248,113,113,.3)}
+    .toast.info{background:rgba(56,189,248,.15);color:var(--accent);border:1px solid rgba(56,189,248,.3)}
+    /* SORT */
+    th.sortable{cursor:pointer;user-select:none}
+    th.sortable:hover{color:var(--accent)}
+    th.sortable .sort-icon{margin-left:4px;opacity:.4;font-size:.7rem}
+    th.sortable.asc .sort-icon::after{content:'▲';opacity:1}
+    th.sortable.desc .sort-icon::after{content:'▼';opacity:1}
+    /* MISC */
+    .empty-row td{text-align:center;color:var(--muted);padding:2.5rem!important}
+    ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}
+    ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+    .key-cell{font-family:monospace;font-size:.78rem;color:var(--muted);max-width:220px;
+      overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-brand">
+    <h1>TCM Admin</h1>
+    <p>Technodel Competitor Monitor</p>
+  </div>
+  <nav class="nav">
+    <button class="nav-item active" onclick="showPage('requests')">
+      <i class="fa-solid fa-user-clock"></i> Requests
+      <span class="nav-badge" id="requestsBadge" style="display:none">0</span>
+    </button>
+    <button class="nav-item" onclick="showPage('users')">
+      <i class="fa-solid fa-users"></i> Users
+    </button>
+    <button class="nav-item" onclick="showPage('reports')">
+      <i class="fa-solid fa-chart-bar"></i> Reports
+    </button>
+    <button class="nav-item" onclick="showPage('apikeys')">
+      <i class="fa-solid fa-key"></i> API Keys
+    </button>
+    <button class="nav-item" onclick="showPage('pricing')"><i class="fa-solid fa-tags"></i> Pricing Plans</button>
+    <button class="nav-item" onclick="showPage('settings')">
+      <i class="fa-solid fa-gear"></i> Settings
+    </button>
+  </nav>
+  <div class="sidebar-foot">
+    <button class="btn btn-ghost btn-sm" style="width:100%" onclick="logout()">
+      <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
+    </button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- REQUESTS -->
+  <div class="page active" id="page-requests">
+    <div class="page-title"><i class="fa-solid fa-user-clock"></i> Signup Requests</div>
+    <div class="panel">
+      <div class="panel-head"><h3><i class="fa-solid fa-hourglass-half"></i> Pending Approval</h3>
+        <button class="btn btn-ghost btn-sm" onclick="loadRequests()"><i class="fa-solid fa-rotate-right"></i></button>
+      </div>
+      <table><thead><tr><th>Username</th><th>Requested</th><th>Actions</th></tr></thead>
+        <tbody id="requestsBody"></tbody></table>
+    </div>
+  </div>
+
+  <!-- USERS -->
+  <div class="page" id="page-users">
+    <div class="page-title"><i class="fa-solid fa-users"></i> Users</div>
+    <div class="stats-row" id="userStats"></div>
+    <div class="panel">
+      <div class="panel-head">
+        <h3><i class="fa-solid fa-list"></i> All Users</h3>
+        <div style="display:flex;gap:8px">
+          <input type="text" id="userSearch" placeholder="Search…" oninput="filterUsers()"
+            style="max-width:180px;padding:7px 11px;font-size:.82rem">
+          <button class="btn btn-ghost btn-sm" onclick="loadUsers()"><i class="fa-solid fa-rotate-right"></i></button>
+        </div>
+      </div>
+      <div style="overflow-x:auto">
+        <table><thead><tr>
+          <th class="sortable" onclick="sortUsers('username')">Username<span class="sort-icon"></span></th>
+          <th class="sortable" onclick="sortUsers('status')">Status<span class="sort-icon"></span></th>
+          <th class="sortable" onclick="sortUsers('products_limit')">Limit<span class="sort-icon"></span></th>
+          <th class="sortable" onclick="sortUsers('product_count')">Products<span class="sort-icon"></span></th>
+          <th class="sortable" onclick="sortUsers('scans_this_month')">Scans/Month<span class="sort-icon"></span></th>
+          <th class="sortable" onclick="sortUsers('last_login')">Last Login<span class="sort-icon"></span></th>
+          <th>Actions</th>
+        </tr></thead>
+        <tbody id="usersBody"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- REPORTS -->
+  <div class="page" id="page-reports">
+    <div class="page-title"><i class="fa-solid fa-chart-bar"></i> Usage Reports</div>
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap">
+      <div class="form-group" style="margin:0">
+        <select id="reportDays" onchange="loadReports()" style="max-width:160px">
+          <option value="7">Last 7 days</option>
+          <option value="30" selected>Last 30 days</option>
+          <option value="90">Last 90 days</option>
+          <option value="365">Last 12 months</option>
+        </select>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="loadReports()"><i class="fa-solid fa-rotate-right"></i></button>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h3><i class="fa-solid fa-table"></i> Usage by User</h3></div>
+      <div style="overflow-x:auto">
+        <table><thead><tr>
+          <th class="sortable" onclick="sortReports('username')">Username<span class="sort-icon"></span></th>
+          <th class="sortable" onclick="sortReports('status')">Status<span class="sort-icon"></span></th>
+          <th class="sortable" onclick="sortReports('products_total')">Products<span class="sort-icon"></span></th>
+          <th class="sortable" onclick="sortReports('products_active')">Active<span class="sort-icon"></span></th>
+          <th class="sortable" onclick="sortReports('scans_period')">Scans (period)<span class="sort-icon"></span></th>
+          <th class="sortable" onclick="sortReports('scans_total')">Scans (all time)<span class="sort-icon"></span></th>
+          <th class="sortable" onclick="sortReports('last_scan')">Last Scan<span class="sort-icon"></span></th>
+          <th>Details</th>
+        </tr></thead>
+        <tbody id="reportsBody"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- API KEYS -->
+  <div class="page" id="page-apikeys">
+    <div class="page-title"><i class="fa-solid fa-key"></i> API Keys</div>
+    <div class="panel">
+      <div class="panel-head"><h3><i class="fa-solid fa-user-tag"></i> Select User</h3></div>
+      <div class="panel-body">
+        <div style="display:flex;gap:10px;align-items:end;margin-bottom:1.25rem">
+          <div class="form-group" style="margin:0;flex:1">
+            <label>User</label>
+            <select id="apikeyUserSelect" onchange="loadApiKeys()"></select>
+          </div>
+        </div>
+        <div id="apikeyList" style="margin-bottom:1rem"></div>
+        <div style="display:flex;gap:8px;align-items:end;flex-wrap:wrap">
+          <div class="form-group" style="margin:0;flex:1">
+            <label>Key Label</label>
+            <input type="text" id="newKeyLabel" placeholder="e.g. Production">
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="createApiKey()">
+            <i class="fa-solid fa-plus"></i> Generate Key
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="page" id="page-pricing">
+    <div class="page-title"><i class="fa-solid fa-tags"></i> Edit Pricing Plans</div>
+    <div class="panel">
+      <div class="form-group">
+        <label>JSON Data</label>
+        <textarea id="pricingJson" rows="15" style="font-family:monospace;white-space:pre"></textarea>
+        <div class="input-hint">Edit the raw JSON for the plans.</div>
+      </div>
+      <button class="btn btn-primary" onclick="savePricing()">Save Pricing</button>
+    </div>
+  </div>
+
+  <div class="page" id="page-settings">
+    <div class="page-title"><i class="fa-solid fa-gear"></i> Global Settings</div>
+    <div class="panel">
+      <div class="panel-head"><h3><i class="fa-solid fa-globe"></i> Target Sites (shared for all users)</h3></div>
+      <div class="panel-body">
+        <div id="adminSiteList" style="margin-bottom:12px"></div>
+        <div style="display:flex;gap:8px;align-items:end;flex-wrap:wrap">
+          <div class="form-group" style="margin:0;flex:1">
+            <label>URL</label>
+            <input type="text" id="adminNewUrl" placeholder="https://example.com">
+          </div>
+          <label style="display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--txt2);
+            align-self:center;white-space:nowrap;text-transform:none;letter-spacing:0;margin-bottom:0">
+            <input type="checkbox" id="adminNewTva" style="width:auto;padding:0"> +TVA 11%
+          </label>
+          <button class="btn btn-primary btn-sm" onclick="adminAddSite()">
+            <i class="fa-solid fa-plus"></i> Add
+          </button>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-top:1.25rem">
+          <button class="btn btn-primary" onclick="adminSaveSettings()">
+            <i class="fa-solid fa-floppy-disk"></i> Save Settings
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Settings -->
+    <div class="panel" style="margin-top:1.5rem">
+      <div class="panel-head"><h3><i class="fa-solid fa-robot"></i> AI Configuration (Multi-Provider)</h3></div>
+      <div class="panel-body">
+        <div id="aiSettingsStatus" style="margin-bottom:1rem;padding:10px 14px;border-radius:8px;background:var(--panel2);font-size:.9rem">
+          <i class="fa-solid fa-circle-notch fa-spin" style="color:var(--accent)"></i> Loading...
+        </div>
+        
+        <!-- Groq (Primary) -->
+        <div class="form-row" style="align-items:end;margin-bottom:12px">
+          <div class="form-group" style="margin:0;flex:1">
+            <label><strong style="color:var(--accent)">1. Groq</strong> <span style="color:var(--green);font-size:.75rem">PRIMARY</span> <span style="color:var(--muted);font-weight:400;text-transform:none">— Fastest, uses Llama 3.3 70B</span></label>
+            <input type="password" id="groqApiKey" placeholder="gsk_...">
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="saveProviderKey('groq')">
+            <i class="fa-solid fa-floppy-disk"></i> Save
+          </button>
+          <button class="btn btn-ghost btn-sm" onclick="deleteProviderKey('groq')" style="margin-left:8px">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </div>
+        
+        <!-- DeepSeek (Secondary) -->
+        <div class="form-row" style="align-items:end;margin-bottom:12px">
+          <div class="form-group" style="margin:0;flex:1">
+            <label><strong style="color:var(--accent)">2. DeepSeek</strong> <span style="color:var(--orange);font-size:.75rem">FALLBACK</span> <span style="color:var(--muted);font-weight:400;text-transform:none">— DeepSeek-V3 model</span></label>
+            <input type="password" id="deepseekApiKey" placeholder="sk-...">
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="saveProviderKey('deepseek')">
+            <i class="fa-solid fa-floppy-disk"></i> Save
+          </button>
+          <button class="btn btn-ghost btn-sm" onclick="deleteProviderKey('deepseek')" style="margin-left:8px">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </div>
+        
+        <!-- Gemini (Tertiary) -->
+        <div class="form-row" style="align-items:end;margin-bottom:12px">
+          <div class="form-group" style="margin:0;flex:1">
+            <label><strong style="color:var(--accent)">3. Gemini</strong> <span style="color:var(--orange);font-size:.75rem">FALLBACK</span> <span style="color:var(--muted);font-weight:400;text-transform:none">— Google Gemini 2.0 Flash</span></label>
+            <input type="password" id="geminiApiKey" placeholder="AIzaSy...">
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="saveProviderKey('gemini')">
+            <i class="fa-solid fa-floppy-disk"></i> Save
+          </button>
+          <button class="btn btn-ghost btn-sm" onclick="deleteProviderKey('gemini')" style="margin-left:8px">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </div>
+        
+        <p style="margin-top:12px;font-size:.8rem;color:var(--muted)">
+          <i class="fa-solid fa-circle-info"></i> 
+          <strong>Auto-fallback:</strong> If Groq fails, automatically tries DeepSeek, then Gemini. 
+          Get keys from: <a href="https://console.groq.com" target="_blank" style="color:var(--accent)">Groq</a> • 
+          <a href="https://platform.deepseek.com" target="_blank" style="color:var(--accent)">DeepSeek</a> • 
+          <a href="https://aistudio.google.com" target="_blank" style="color:var(--accent)">Gemini</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- EDIT USER MODAL -->
+<div class="modal" id="editUserModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2><i class="fa-solid fa-pen" style="color:var(--accent)"></i> Edit User — <span id="editUserName"></span></h2>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('editUserModal')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editUserId">
+      <div class="form-row cols2">
+        <div class="form-group">
+          <label>Status</label>
+          <select id="editStatus">
+            <option value="active">Active</option>
+            <option value="suspended">Suspended</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Products / Month Limit</label>
+          <input type="number" id="editLimit" min="1" max="9999" value="20">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>New Password <span style="color:var(--muted);text-transform:none;font-weight:400">(leave blank to keep current)</span></label>
+          <input type="password" id="editPassword" placeholder="••••••••">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Notes</label>
+          <textarea id="editNotes" rows="2" placeholder="Internal notes…" style="resize:vertical"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('editUserModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveUser()"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- USER USAGE DETAIL MODAL -->
+<div class="modal" id="usageModal">
+  <div class="modal-box" style="max-width:680px">
+    <div class="modal-head">
+      <h2><i class="fa-solid fa-chart-line" style="color:var(--accent)"></i> Usage — <span id="usageUserName"></span></h2>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('usageModal')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <canvas id="usageChart" style="max-height:260px;margin-bottom:1rem"></canvas>
+      <div id="usageDetails"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+// ============================================================
+// STATE
+// ============================================================
+let allUsers   = [];
+let allReports = [];
+let adminSites = [];
+let usageChart = null;
+let userSortCol = 'username', userSortDir = 'asc';
+let repSortCol  = 'scans_total', repSortDir = 'desc';
+
+// ============================================================
+// INIT
+// ============================================================
+async function init() {
+  await Promise.all([loadRequests(), loadUsers(), loadAdminSettings()]);
+  populateApikeySelect();
+}
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  const navItems = document.querySelectorAll('.nav-item');
+  navItems.forEach(n => { if (n.textContent.toLowerCase().includes(id.toLowerCase().slice(0,4))) n.classList.add('active'); });
+  if (id === 'reports') loadReports();
+  if (id === 'apikeys') { populateApikeySelect(); loadApiKeys(); }
+  if (id === 'settings') loadAdminSettings();
+}
+
+// ============================================================
+// SIGNUP REQUESTS
+// ============================================================
+async function loadRequests() {
+  try {
+    const rows = await api('/api/admin/requests');
+    const badge = document.getElementById('requestsBadge');
+    badge.style.display = rows.length ? 'inline-flex' : 'none';
+    badge.textContent = rows.length;
+
+    const tb = document.getElementById('requestsBody');
+    if (!rows.length) {
+      tb.innerHTML = '<tr class="empty-row"><td colspan="3">No pending requests</td></tr>';
+      return;
+    }
+    tb.innerHTML = rows.map(r => `<tr>
+      <td><strong>${esc(r.username)}</strong></td>
+      <td style="color:var(--muted);font-size:.8rem">${fmtDate(r.requested_at)}</td>
+      <td>
+        <button class="btn btn-success btn-sm" onclick="approveRequest(${r.id},'${esc(r.username)}')">
+          <i class="fa-solid fa-check"></i> Approve
+        </button>
+        <button class="btn btn-danger btn-sm" onclick="rejectRequest(${r.id})" style="margin-left:6px">
+          <i class="fa-solid fa-xmark"></i> Reject
+        </button>
+      </td>
+    </tr>`).join('');
+  } catch(e) { toast('Error loading requests','err'); }
+}
+
+async function approveRequest(id, username) {
+  if (!confirm(`Approve "${username}"?`)) return;
+  try {
+    await api(`/api/admin/requests/${id}/approve`, 'POST');
+    toast(`"${username}" approved and activated`, 'ok');
+    loadRequests(); loadUsers();
+  } catch(e) { toast(e.message,'err'); }
+}
+
+async function rejectRequest(id) {
+  if (!confirm('Reject this request?')) return;
+  try {
+    await api(`/api/admin/requests/${id}/reject`, 'POST');
+    toast('Request rejected', 'info');
+    loadRequests();
+  } catch(e) { toast(e.message,'err'); }
+}
+
+// ============================================================
+// USERS
+// ============================================================
+async function loadUsers() {
+  try {
+    allUsers = await api('/api/admin/users');
+    renderUsers();
+    renderUserStats();
+  } catch(e) { toast('Error loading users','err'); }
+}
+
+function renderUserStats() {
+  const total     = allUsers.length;
+  const active    = allUsers.filter(u => u.status === 'active').length;
+  const suspended = allUsers.filter(u => u.status === 'suspended').length;
+  const products  = allUsers.reduce((s,u) => s + (u.product_count||0), 0);
+  document.getElementById('userStats').innerHTML = [
+    ['fa-users','var(--accent)',total,'Total Users'],
+    ['fa-circle-check','var(--green)',active,'Active'],
+    ['fa-ban','var(--red)',suspended,'Suspended'],
+    ['fa-boxes-stacked','var(--purple)',products,'Total Products'],
+  ].map(([ic,col,val,lbl]) => `<div class="stat">
+    <div class="stat-icon" style="color:${col}"><i class="fa-solid ${ic}"></i></div>
+    <div class="stat-val">${val}</div><div class="stat-lbl">${lbl}</div>
+  </div>`).join('');
+}
+
+function sortUsers(col) {
+  if (userSortCol === col) userSortDir = userSortDir === 'asc' ? 'desc' : 'asc';
+  else { userSortCol = col; userSortDir = 'asc'; }
+  renderUsers();
+  document.querySelectorAll('#page-users th.sortable').forEach(th => {
+    th.classList.remove('asc','desc');
+    if (th.getAttribute('onclick').includes(col)) th.classList.add(userSortDir);
+  });
+}
+
+function filterUsers() {
+  renderUsers();
+}
+
+function renderUsers() {
+  const q = (document.getElementById('userSearch')?.value||'').toLowerCase();
+  let list = allUsers.filter(u => !q || u.username.toLowerCase().includes(q));
+  list = sortArr(list, userSortCol, userSortDir);
+  const tb = document.getElementById('usersBody');
+  if (!list.length) { tb.innerHTML = '<tr class="empty-row"><td colspan="7">No users found</td></tr>'; return; }
+  tb.innerHTML = list.map(u => `<tr>
+    <td><strong>${esc(u.username)}</strong></td>
+    <td>${statusBadge(u.status)}</td>
+    <td>${u.products_limit}</td>
+    <td>${u.product_count||0}</td>
+    <td>${u.scans_this_month||0}</td>
+    <td style="color:var(--muted);font-size:.8rem">${fmtDate(u.last_login)}</td>
+    <td>
+      <button class="btn btn-ghost btn-sm" onclick="openEditUser(${u.id})"><i class="fa-solid fa-pen"></i></button>
+      <button class="btn btn-danger btn-sm" onclick="deleteUser(${u.id},'${esc(u.username)}')" style="margin-left:4px">
+        <i class="fa-solid fa-trash"></i></button>
+    </td>
+  </tr>`).join('');
+}
+
+function openEditUser(id) {
+  const u = allUsers.find(x => x.id === id);
+  if (!u) return;
+  document.getElementById('editUserId').value   = u.id;
+  document.getElementById('editUserName').textContent = u.username;
+  document.getElementById('editStatus').value   = u.status;
+  document.getElementById('editLimit').value    = u.products_limit;
+  document.getElementById('editPassword').value = '';
+  document.getElementById('editNotes').value    = u.notes || '';
+  document.getElementById('editUserModal').classList.add('open');
+}
+
+async function saveUser() {
+  const id       = document.getElementById('editUserId').value;
+  const password = document.getElementById('editPassword').value.trim();
+  const body = {
+    status:         document.getElementById('editStatus').value,
+    products_limit: parseInt(document.getElementById('editLimit').value),
+    notes:          document.getElementById('editNotes').value
+  };
+  if (password) body.password = password;
+  try {
+    await api(`/api/admin/users/${id}`, 'PATCH', body);
+    toast('User updated', 'ok');
+    closeModal('editUserModal');
+    loadUsers();
+  } catch(e) { toast(e.message,'err'); }
+}
+
+async function deleteUser(id, username) {
+  if (!confirm(`Delete user "${username}"? This removes all their products and data.`)) return;
+  try {
+    await api(`/api/admin/users/${id}`, 'DELETE');
+    toast(`"${username}" deleted`, 'ok');
+    loadUsers();
+  } catch(e) { toast(e.message,'err'); }
+}
+
+// ============================================================
+// REPORTS
+// ============================================================
+async function loadReports() {
+  const days = document.getElementById('reportDays')?.value || 30;
+  try {
+    allReports = await api(`/api/admin/reports?days=${days}`);
+    renderReports();
+  } catch(e) { toast('Error loading reports','err'); }
+}
+
+function sortReports(col) {
+  if (repSortCol === col) repSortDir = repSortDir === 'asc' ? 'desc' : 'asc';
+  else { repSortCol = col; repSortDir = 'desc'; }
+  renderReports();
+  document.querySelectorAll('#page-reports th.sortable').forEach(th => {
+    th.classList.remove('asc','desc');
+    if (th.getAttribute('onclick').includes(col)) th.classList.add(repSortDir);
+  });
+}
+
+function renderReports() {
+  const list = sortArr(allReports, repSortCol, repSortDir);
+  const tb   = document.getElementById('reportsBody');
+  if (!list.length) { tb.innerHTML = '<tr class="empty-row"><td colspan="8">No data</td></tr>'; return; }
+  tb.innerHTML = list.map(u => `<tr>
+    <td><strong>${esc(u.username)}</strong></td>
+    <td>${statusBadge(u.status)}</td>
+    <td>${u.products_total||0}</td>
+    <td>${u.products_active||0}</td>
+    <td><strong style="color:var(--accent)">${u.scans_period||0}</strong></td>
+    <td>${u.scans_total||0}</td>
+    <td style="color:var(--muted);font-size:.79rem">${fmtDate(u.last_scan)}</td>
+    <td><button class="btn btn-ghost btn-sm" onclick="showUsageDetail(${u.id},'${esc(u.username)}')">
+      <i class="fa-solid fa-chart-line"></i>
+    </button></td>
+  </tr>`).join('');
+}
+
+async function showUsageDetail(userId, username) {
+  document.getElementById('usageUserName').textContent = username;
+  const days = document.getElementById('reportDays')?.value || 30;
+  try {
+    const rows = await api(`/api/admin/users/${userId}/usage?days=${days}`);
+    const labels = rows.map(r => r.day ? new Date(r.day).toLocaleDateString() : '');
+    const data   = rows.map(r => r.scans);
+    const ctx    = document.getElementById('usageChart').getContext('2d');
+    if (usageChart) { usageChart.destroy(); usageChart = null; }
+    usageChart = new Chart(ctx, {
+      type: 'bar',
+      data: { labels, datasets: [{ label:'Scans', data,
+        backgroundColor:'rgba(56,189,248,.4)', borderColor:'#38bdf8', borderWidth:1.5, borderRadius:5 }] },
+      options: { responsive:true, maintainAspectRatio:true,
+        plugins:{ legend:{ display:false } },
+        scales:{
+          x:{ ticks:{ color:'#64748b', font:{size:10} }, grid:{ color:'rgba(99,179,237,.08)' } },
+          y:{ ticks:{ color:'#64748b', stepSize:1 }, grid:{ color:'rgba(99,179,237,.08)' } }
+        }
+      }
+    });
+    const user = allReports.find(u => u.id === userId) || {};
+    document.getElementById('usageDetails').innerHTML = `
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:.5rem">
+        <div class="stat" style="flex:1;min-width:120px"><div class="stat-val">${user.products_total||0}</div><div class="stat-lbl">Total Products</div></div>
+        <div class="stat" style="flex:1;min-width:120px"><div class="stat-val">${user.products_active||0}</div><div class="stat-lbl">Active</div></div>
+        <div class="stat" style="flex:1;min-width:120px"><div class="stat-val">${user.scans_total||0}</div><div class="stat-lbl">All-Time Scans</div></div>
+        <div class="stat" style="flex:1;min-width:120px"><div class="stat-val">${user.products_limit||0}</div><div class="stat-lbl">Monthly Limit</div></div>
+      </div>`;
+    document.getElementById('usageModal').classList.add('open');
+  } catch(e) { toast('Error loading usage','err'); }
+}
+
+// ============================================================
+// API KEYS
+// ============================================================
+function populateApikeySelect() {
+  const sel = document.getElementById('apikeyUserSelect');
+  if (!sel) return;
+  sel.innerHTML = allUsers.length
+    ? allUsers.map(u => `<option value="${u.id}">${esc(u.username)}</option>`).join('')
+    : '<option value="">No users yet</option>';
+}
+
+async function loadApiKeys() {
+  const userId = document.getElementById('apikeyUserSelect')?.value;
+  if (!userId) return;
+  try {
+    const keys = await api(`/api/admin/users/${userId}/apikeys`);
+    const div  = document.getElementById('apikeyList');
+    if (!keys.length) {
+      div.innerHTML = '<div style="color:var(--muted);font-size:.83rem;margin-bottom:8px">No keys yet for this user.</div>';
+      return;
+    }
+    div.innerHTML = `<table style="margin-bottom:12px"><thead><tr>
+      <th>Label</th><th>Key</th><th>Created</th><th></th>
+    </tr></thead><tbody>${keys.map(k => `<tr>
+      <td>${esc(k.label)}</td>
+      <td class="key-cell" title="${esc(k.key_value)}">${esc(k.key_value)}</td>
+      <td style="color:var(--muted);font-size:.78rem">${fmtDate(k.created_at)}</td>
+      <td><button class="btn btn-danger btn-sm" onclick="deleteApiKey(${k.id})"><i class="fa-solid fa-trash"></i></button></td>
+    </tr>`).join('')}</tbody></table>`;
+  } catch(e) { toast('Error loading keys','err'); }
+}
+
+async function createApiKey() {
+  const userId = document.getElementById('apikeyUserSelect')?.value;
+  const label  = document.getElementById('newKeyLabel').value.trim() || 'Default';
+  if (!userId) return toast('Select a user first','err');
+  try {
+    const r = await api(`/api/admin/users/${userId}/apikeys`, 'POST', { label });
+    toast(`Key created: ${r.key}`, 'ok');
+    document.getElementById('newKeyLabel').value = '';
+    loadApiKeys();
+  } catch(e) { toast(e.message,'err'); }
+}
+
+async function deleteApiKey(id) {
+  if (!confirm('Delete this API key?')) return;
+  try {
+    await api(`/api/admin/apikeys/${id}`, 'DELETE');
+    toast('Key deleted','ok');
+    loadApiKeys();
+  } catch(e) { toast(e.message,'err'); }
+}
+
+// ============================================================
+// SETTINGS (target sites)
+// ============================================================
+async function loadAdminSettings() {
+  try {
+    const s = await api('/api/admin/settings');
+    adminSites = s.targetSites || [];
+    renderAdminSites();
+    loadAISettings();
+  } catch(e) {}
+}
+
+function renderAdminSites() {
+  const div = document.getElementById('adminSiteList');
+  if (!div) return;
+  if (!adminSites.length) { div.innerHTML = '<div style="color:var(--muted);font-size:.83rem">No sites configured.</div>'; return; }
+  div.innerHTML = adminSites.map((s,i) => {
+    const hasTva = /\|TVA/i.test(s);
+    const url = s.replace(/\s*\|TVA\s*/i,'').trim();
+    return `<div style="display:flex;align-items:center;gap:8px;padding:9px 12px;
+      background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:9px;margin-bottom:6px">
+      <span style="flex:1;font-size:.83rem;color:var(--txt2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+        title="${esc(url)}">${esc(url)}</span>
+      ${hasTva?'<span class="badge badge-orange">+TVA</span>':''}
+      <button class="btn btn-danger btn-sm" onclick="adminRemoveSite(${i})"><i class="fa-solid fa-xmark"></i></button>
+    </div>`;
+  }).join('');
+}
+
+function adminRemoveSite(i) { adminSites.splice(i,1); renderAdminSites(); }
+
+function adminAddSite() {
+  let url = document.getElementById('adminNewUrl').value.trim();
+  if (!url) return;
+  if (document.getElementById('adminNewTva').checked) url += ' |TVA';
+  adminSites.push(url);
+  document.getElementById('adminNewUrl').value = '';
+  document.getElementById('adminNewTva').checked = false;
+  renderAdminSites();
+}
+
+async function adminSaveSettings() {
+  try {
+    await api('/api/admin/settings', 'POST', { targetSites: adminSites });
+    toast('Settings saved','ok');
+  } catch(e) { toast(e.message,'err'); }
+}
+
+// ============================================================
+// AI / Multi-Provider Key Management
+// Priority: Groq → DeepSeek → Gemini
+// ============================================================
+async function loadAISettings() {
+  try {
+    const status = await api('/api/admin/ai-keys');
+    const el = document.getElementById('aiSettingsStatus');
+    
+    const providers = status.providers || [];
+    const active = status.active || [];
+    
+    if (active.length > 0) {
+      const primary = active[0];
+      const fallback = active.slice(1).join(', ') || 'none';
+      el.innerHTML = `<i class="fa-solid fa-check-circle" style="color:var(--green)"></i> <strong>AI configured</strong> — Primary: <b>${primary}</b>, Fallbacks: ${fallback}`;
+      el.style.background = 'rgba(34,197,94,.08)';
+    } else {
+      el.innerHTML = '<i class="fa-solid fa-circle-info" style="color:var(--muted)"></i> <strong>No AI keys configured</strong> — Add API keys for AI-powered product validation';
+      el.style.background = 'var(--panel2)';
+    }
+    
+    // Update input placeholders to show status
+    providers.forEach(p => {
+      const input = document.getElementById(p.id + 'ApiKey');
+      if (input && p.configured) {
+        input.placeholder = `✓ ${p.name} key configured`;
+      }
+    });
+  } catch(e) {
+    document.getElementById('aiSettingsStatus').innerHTML = '<i class="fa-solid fa-triangle-exclamation" style="color:var(--red)"></i> Error loading AI settings';
+  }
+}
+
+async function saveProviderKey(provider) {
+  const key = document.getElementById(provider + 'ApiKey').value.trim();
+  if (!key || key.length < 10) {
+    toast(`Please enter a valid ${provider} API key`, 'err');
+    return;
+  }
+  try {
+    await api(`/api/admin/ai-keys/${provider}`, 'POST', { key });
+    document.getElementById(provider + 'ApiKey').value = '';
+    toast(`${provider} API key saved`, 'ok');
+    loadAISettings();
+  } catch(e) { toast(e.message, 'err'); }
+}
+
+async function deleteProviderKey(provider) {
+  if (!confirm(`Remove ${provider} API key?`)) return;
+  try {
+    await api(`/api/admin/ai-keys/${provider}`, 'DELETE');
+    document.getElementById(provider + 'ApiKey').placeholder = getProviderPlaceholder(provider);
+    toast(`${provider} API key removed`, 'info');
+    loadAISettings();
+  } catch(e) { toast(e.message, 'err'); }
+}
+
+function getProviderPlaceholder(provider) {
+  const map = { groq: 'gsk_...', deepseek: 'sk-...', gemini: 'AIzaSy...' };
+  return map[provider] || 'Enter API key...';
+}
+
+// ============================================================
+// HELPERS
+// ============================================================
+async function api(url, method='GET', body) {
+  const opts = { method, credentials:'include', headers:{} };
+  if (body) { opts.headers['Content-Type']='application/json'; opts.body=JSON.stringify(body); }
+  const r = await fetch(url, opts);
+  if (r.status === 401) { window.location.href='/login'; throw new Error('Session expired'); }
+  const data = await r.json();
+  if (data.error) throw new Error(data.error);
+  return data;
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function fmtDate(d) {
+  if (!d) return '—';
+  try { return new Date(d).toLocaleString(); } catch(_) { return d; }
+}
+
+function statusBadge(s) {
+  const map = { active:'badge-green', suspended:'badge-red', pending:'badge-orange' };
+  return `<span class="badge ${map[s]||'badge-blue'}">${s}</span>`;
+}
+
+function sortArr(arr, col, dir) {
+  return [...arr].sort((a,b) => {
+    let av = a[col], bv = b[col];
+    if (av == null) av = '';
+    if (bv == null) bv = '';
+    if (typeof av === 'string') av = av.toLowerCase();
+    if (typeof bv === 'string') bv = bv.toLowerCase();
+    if (av < bv) return dir==='asc' ? -1 : 1;
+    if (av > bv) return dir==='asc' ? 1 : -1;
+    return 0;
+  });
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  if (id==='usageModal' && usageChart) { usageChart.destroy(); usageChart=null; }
+}
+
+document.querySelectorAll('.modal').forEach(m => {
+  m.addEventListener('click', e => { if (e.target===m) closeModal(m.id); });
+});
+
+function toast(msg, type='ok') {
+  const w = document.getElementById('toastWrap');
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.innerHTML = `<i class="fa-solid fa-${type==='ok'?'check-circle':type==='err'?'xmark-circle':'circle-info'}"></i>${esc(msg)}`;
+  w.appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+
+async function logout() {
+  await fetch('/api/auth/logout', { method:'POST', credentials:'include' });
+  window.location.href = '/login';
+}
+
+init();
+</script>
+</body>
+</html>
+

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GCM â€” Competitor Price Monitor</title>
+  <title>GCM &mdash; Galaxy Competitor Monitor</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -30,9 +30,7 @@
       padding:1.25rem 1.75rem;background:var(--card);border:1px solid var(--border);
       border-radius:18px;backdrop-filter:blur(20px);margin-bottom:1.75rem;gap:12px;flex-wrap:wrap}
     .header-brand{display:flex;align-items:center;gap:14px}
-    .brand-icon{width:46px;height:46px;background:var(--grad);border-radius:13px;
-      display:flex;align-items:center;justify-content:center;font-size:1.4rem;
-      box-shadow:0 8px 24px var(--glow);animation:float 3s ease-in-out infinite}
+    .brand-icon{width:46px;height:46px;border-radius:50%;object-fit:cover;object-position:center;border:2px solid rgba(248,201,92,0.5);box-shadow:0 0 16px rgba(248,201,92,0.3);flex-shrink:0;}
     @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
     .brand-text h1{font-size:1.6rem;font-weight:800;background:var(--grad);
       -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
@@ -279,7 +277,7 @@
 <div class="wrap">
   <div class="header">
     <div class="header-brand">
-      <div class="brand-icon">ðŸ“¡</div>
+      <img src="/galaxy.png" alt="GCM" class="brand-icon">
       <div class="brand-text">
         <h1>GCM</h1>
         <p>Galaxy Competitor Monitor</p>

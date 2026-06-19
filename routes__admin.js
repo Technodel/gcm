@@ -86,7 +86,7 @@ router.get('/users/:id/apikeys', (req, res) => {
 
 router.post('/users/:id/apikeys', (req, res) => {
     const { label } = req.body;
-    const key = 'tcm_' + crypto.randomBytes(24).toString('hex');
+    const key = 'gcm_' + crypto.randomBytes(24).toString('hex');
     db.prepare(`INSERT INTO api_keys(user_id,label,key_value) VALUES(?,?,?)`).run(req.params.id, label||'Default', key);
     res.json({ success: true, key });
 });

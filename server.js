@@ -53,7 +53,7 @@ app.post('/api/auth/login', async (req, res) => {
     db.prepare(`UPDATE users SET last_login=datetime('now') WHERE id=?`).run(user.id);
 
     const token = signToken({ id: user.id, username: user.username, role: user.role });
-    res.cookie('tcm_token', token, {
+    res.cookie('gcm_token', token, {
         httpOnly: true, sameSite: 'lax',
         secure: process.env.NODE_ENV === 'production',
         maxAge: 7 * 24 * 3600 * 1000
@@ -63,7 +63,7 @@ app.post('/api/auth/login', async (req, res) => {
 
 // Logout
 app.post('/api/auth/logout', (req, res) => {
-    res.clearCookie('tcm_token');
+    res.clearCookie('gcm_token');
     res.json({ success: true });
 });
 
@@ -131,14 +131,14 @@ const PUB = path.join(__dirname, 'public');
 
 // Root: redirect to app or login
 app.get('/', (req, res) => {
-    const token = req.cookies && req.cookies.tcm_token;
+    const token = req.cookies && req.cookies.gcm_token;
     if (!token) return res.redirect('/landing');
     try {
         const user = jwt.verify(token, JWT_SECRET);
         if (user.role === 'admin') return res.redirect('/admin');
         return res.sendFile(path.join(PUB, 'index.html'));
     } catch(_) {
-        res.clearCookie('tcm_token');
+        res.clearCookie('gcm_token');
         return res.redirect('/login');
     }
 });
@@ -158,14 +158,14 @@ app.post('/api/contact', (req, res) => {
 });
 
 app.get('/admin', (req, res) => {
-    const token = req.cookies && req.cookies.tcm_token;
+    const token = req.cookies && req.cookies.gcm_token;
     if (!token) return res.redirect('/login');
     try {
         const user = jwt.verify(token, JWT_SECRET);
         if (user.role !== 'admin') return res.redirect('/');
         return res.sendFile(path.join(PUB, 'admin.html'));
     } catch(_) {
-        res.clearCookie('tcm_token');
+        res.clearCookie('gcm_token');
         return res.redirect('/login');
     }
 });
@@ -173,7 +173,7 @@ app.get('/admin', (req, res) => {
 // Catch-all: if authenticated serve app, else login
 app.get('/{*path}', (req, res, next) => {
     if (req.path.startsWith('/api/')) return next();
-    const token = req.cookies && req.cookies.tcm_token;
+    const token = req.cookies && req.cookies.gcm_token;
     if (!token) return res.redirect('/login');
     res.sendFile(path.join(PUB, 'index.html'));
 });
@@ -238,7 +238,7 @@ autoScanTimer = setInterval(runGlobalAutoScan, 15 * 60 * 1000);
 async function start() {
     await initSchema();
     app.listen(PORT, () => {
-        console.log(`TCM running at http://localhost:${PORT}`);
+        console.log(`GCM running at http://localhost:${PORT}`);
     });
 }
 

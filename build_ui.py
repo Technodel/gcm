@@ -1,4 +1,4 @@
-﻿import os
+import os
 
 HTML_TEMPLATE = """<!DOCTYPE html>
 <html lang="en">
@@ -161,7 +161,7 @@ PAGES['landing.html'] = {
     <section class="hero">
       <div class="hero-badge"><i class="fa-solid fa-microchip"></i> Next-Gen Price Intelligence</div>
       <h1>Outsmart Your Competitors in Real-Time</h1>
-      <p>TCM leverages AI-driven intent analysis and hybrid scraping to monitor your competitors' pricing instantly. Don't let a price change catch you off guard.</p>
+      <p>GCM leverages AI-driven intent analysis and hybrid scraping to monitor your competitors' pricing instantly. Don't let a price change catch you off guard.</p>
       <div class="btn-group">
         <a href="/login" class="btn btn-primary"><i class="fa-solid fa-rocket"></i> Get Started Now</a>
         <a href="#features" class="btn btn-outline"><i class="fa-solid fa-compass"></i> Explore Features</a>

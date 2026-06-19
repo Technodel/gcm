@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TCM — Competitor Price Monitor</title>
+  <title>GCM â€” Competitor Price Monitor</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -279,10 +279,10 @@
 <div class="wrap">
   <div class="header">
     <div class="header-brand">
-      <div class="brand-icon">📡</div>
+      <div class="brand-icon">ðŸ“¡</div>
       <div class="brand-text">
-        <h1>TCM</h1>
-        <p>Technodel Competitor Monitor</p>
+        <h1>GCM</h1>
+        <p>Galaxy Competitor Monitor</p>
       </div>
     </div>
     <div class="header-actions">
@@ -322,7 +322,7 @@
     </div>
     <div class="stat">
       <div class="stat-icon ic-orange"><i class="fa-solid fa-clock-rotate-left"></i></div>
-      <div class="stat-val" id="statLastScan" style="font-size:.85rem;padding-top:4px">—</div>
+      <div class="stat-val" id="statLastScan" style="font-size:.85rem;padding-top:4px">â€”</div>
       <div class="stat-lbl">Last Auto-Scan</div>
     </div>
   </div>
@@ -343,9 +343,9 @@
       </div>
       <div class="add-row">
         <div class="form-group" style="grid-column:1/-1">
-          <input type="text" id="addInput" placeholder="e.g. RTX 4070, iPhone 16 Pro, TP-Link AX5400 …"
+          <input type="text" id="addInput" placeholder="e.g. RTX 4070, iPhone 16 Pro, TP-Link AX5400 â€¦"
             onkeydown="if(event.key==='Enter')addProduct()">
-          <div class="input-hint" id="addInputHint">Enter a product SKU, model number, or name — it will be searched across all target sites.</div>
+          <div class="input-hint" id="addInputHint">Enter a product SKU, model number, or name â€” it will be searched across all target sites.</div>
         </div>
         <div class="form-group" id="nameGroupWrap" style="display:none">
           <label>Display Name (optional)</label>
@@ -381,20 +381,20 @@
       </div>
       <div class="scan-progress" id="scanProgress">
         <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
-        <span class="progress-txt" id="progressTxt">Scanning…</span>
+        <span class="progress-txt" id="progressTxt">Scanningâ€¦</span>
       </div>
       <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
         <div class="scan-stat">
           <div class="scan-stat-lbl">Interval</div>
-          <div class="scan-stat-val" id="asStatInterval">—</div>
+          <div class="scan-stat-val" id="asStatInterval">â€”</div>
         </div>
         <div class="scan-stat">
           <div class="scan-stat-lbl">Last Run</div>
-          <div class="scan-stat-val" id="asStatLast" style="font-size:.75rem">—</div>
+          <div class="scan-stat-val" id="asStatLast" style="font-size:.75rem">â€”</div>
         </div>
         <div class="scan-stat">
           <div class="scan-stat-lbl">Next Run</div>
-          <div class="scan-stat-val" id="asStatNext" style="font-size:.75rem">—</div>
+          <div class="scan-stat-val" id="asStatNext" style="font-size:.75rem">â€”</div>
         </div>
       </div>
     </div>
@@ -405,14 +405,14 @@
     <div class="panel-header">
       <div class="panel-title"><i class="fa-solid fa-radar"></i> Monitored Products</div>
       <div style="display:flex;gap:8px;align-items:center">
-        <input type="text" id="searchInput" placeholder="Search products…"
+        <input type="text" id="searchInput" placeholder="Search productsâ€¦"
           oninput="renderProducts()" style="max-width:200px;padding:8px 12px;font-size:.82rem">
         <select id="sortSelect" onchange="renderProducts()"
           style="padding:8px 10px;font-size:.82rem;border-radius:8px;background:var(--card);color:var(--text);border:1px solid var(--border)">
           <option value="newest">Newest first</option>
           <option value="oldest">Oldest first</option>
-          <option value="cost_asc">Avg cost: low → high</option>
-          <option value="cost_desc">Avg cost: high → low</option>
+          <option value="cost_asc">Avg cost: low â†’ high</option>
+          <option value="cost_desc">Avg cost: high â†’ low</option>
         </select>
         <button class="btn btn-ghost btn-sm" onclick="refreshAll()">
           <i class="fa-solid fa-rotate-right"></i>
@@ -468,7 +468,7 @@
               <div class="toggle-track"></div>
               <div class="toggle-thumb"></div>
             </div>
-            <span style="font-size:.85rem">Auto-convert LBP → USD</span>
+            <span style="font-size:.85rem">Auto-convert LBP â†’ USD</span>
           </label>
           <div style="display:flex;align-items:center;gap:6px">
             <span style="font-size:.82rem;color:var(--txt2)">Rate:</span>
@@ -513,7 +513,7 @@
   <div class="modal-box">
     <div class="modal-head">
       <h2><i class="fa-solid fa-chart-line" style="color:var(--accent)"></i>
-        Price History — <span id="historyTitle" style="font-weight:400"></span></h2>
+        Price History â€” <span id="historyTitle" style="font-weight:400"></span></h2>
       <button class="icon-btn" onclick="closeModal('historyModal')"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="modal-body">
@@ -539,7 +539,7 @@ let historyChart = null;
 let pollTimer = null;
 
 // ============================================================
-// PRICE FORMATTING (LBP → USD conversion)
+// PRICE FORMATTING (LBP â†’ USD conversion)
 // ============================================================
 function formatPrice(raw) {
   if (!raw || raw === 'N/A' || raw === 'Price not available') return raw;
@@ -584,7 +584,7 @@ async function heartbeat() {
     const dot = document.getElementById('statusDot');
     const txt = document.getElementById('statusTxt');
     dot.className = 'status-dot' + (r.scanning ? ' scanning' : '');
-    txt.textContent = r.scanning ? 'Scanning…' : 'Live';
+    txt.textContent = r.scanning ? 'Scanningâ€¦' : 'Live';
   } catch (_) {
     document.getElementById('statusDot').style.background = 'var(--red)';
     document.getElementById('statusTxt').textContent = 'Offline';
@@ -675,7 +675,7 @@ function productCardHTML(p) {
   return `<div class="product-card${p.active===false?' paused':''}${isOpen?' open':''}" id="pc-${p.id}">
     <div class="product-card-head" onclick="toggleCard('${p.id}')">
       <div class="product-toggle" onclick="event.stopPropagation()">
-        <label class="toggle" title="${p.active!==false?'Active — click to pause':'Paused — click to activate'}">
+        <label class="toggle" title="${p.active!==false?'Active â€” click to pause':'Paused â€” click to activate'}">
           <input type="checkbox" ${p.active!==false?'checked':''} onchange="toggleActive('${p.id}',this.checked)">
           <div class="toggle-track"></div>
           <div class="toggle-thumb"></div>
@@ -688,12 +688,12 @@ function productCardHTML(p) {
             ? `<span class="link-badge"><i class="fa-solid fa-link"></i> Direct Link</span>`
             : `<span class="query-badge"><i class="fa-solid fa-magnifying-glass"></i> ${esc(p.query)}</span>`}
           ${lastCheckedStr}
-          ${p.active===false ? '<span style="color:var(--orange);font-weight:700">⏸ Paused</span>' : ''}
+          ${p.active===false ? '<span style="color:var(--orange);font-weight:700">â¸ Paused</span>' : ''}
         </div>
       </div>
       <div class="product-actions">
         ${foundCount > 0 ? `<span style="font-size:.78rem;color:var(--green);font-weight:700;background:rgba(52,211,153,.1);padding:3px 9px;border-radius:6px">
-          ${foundCount} found${bestPrice ? ' · from '+bestPrice : ''}
+          ${foundCount} found${bestPrice ? ' Â· from '+bestPrice : ''}
         </span>` : ''}
         <button class="btn btn-secondary btn-xs" onclick="event.stopPropagation();scanOne('${p.id}')"
           id="scanBtn-${p.id}" title="Scan now">
@@ -769,7 +769,7 @@ function siteCardHTML(product, s) {
     </div>
     ${trendHTML}
     <div class="site-card-footer">
-      <span class="site-checked">${s.lastChecked ? s.lastChecked.split(',')[0] : '—'}</span>
+      <span class="site-checked">${s.lastChecked ? s.lastChecked.split(',')[0] : 'â€”'}</span>
       <div class="site-actions">
         <button class="btn btn-ghost btn-xs" onclick="event.stopPropagation();syncSite('${product.id}','${esc(s.siteName)}')"
           title="Refresh this supplier" id="sync-${product.id}-${esc(s.siteName).replace(/[^a-z0-9]/gi,'')}">
@@ -803,11 +803,11 @@ function setInputType(t) {
   const nameWrap = document.getElementById('nameGroupWrap');
   if (t === 'link') {
     inp.placeholder = 'https://example.com/product/rtx-4070';
-    hint.textContent = 'Paste a direct product page URL — it will be monitored for price changes.';
+    hint.textContent = 'Paste a direct product page URL â€” it will be monitored for price changes.';
     nameWrap.style.display = 'block';
   } else {
-    inp.placeholder = 'e.g. RTX 4070, iPhone 16 Pro, TP-Link AX5400 …';
-    hint.textContent = 'Enter a product SKU, model number, or name — searched across all target sites.';
+    inp.placeholder = 'e.g. RTX 4070, iPhone 16 Pro, TP-Link AX5400 â€¦';
+    hint.textContent = 'Enter a product SKU, model number, or name â€” searched across all target sites.';
     nameWrap.style.display = 'none';
   }
 }
@@ -817,7 +817,7 @@ async function addProduct() {
   if (!val) { toast('Enter a product name or URL', 'err'); return; }
 
   const btn = document.getElementById('addBtn');
-  btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Adding…';
+  btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Addingâ€¦';
 
   try {
     const body = inputType === 'link'
@@ -833,7 +833,7 @@ async function addProduct() {
     document.getElementById('addName').value = '';
     renderProducts();
     updateStats();
-    toast('Product added — scanning now…', 'ok');
+    toast('Product added â€” scanning nowâ€¦', 'ok');
 
     // Auto-trigger scan
     scanOne(r.product.id);
@@ -846,7 +846,7 @@ async function addProduct() {
 }
 
 // ============================================================
-// SYNC SINGLE SITE — per-supplier refresh
+// SYNC SINGLE SITE â€” per-supplier refresh
 // ============================================================
 async function syncSite(productId, siteName) {
   const btn = document.getElementById(`sync-${productId}-${siteName.replace(/[^a-z0-9]/gi,'')}`);
@@ -892,11 +892,11 @@ async function syncSite(productId, siteName) {
 }
 
 // ============================================================
-// SCAN — SSE live progress (all sites)
+// SCAN â€” SSE live progress (all sites)
 // ============================================================
 function scanOne(id) {
   const btn = document.getElementById('scanBtn-' + id);
-  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Scanning…'; }
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Scanningâ€¦'; }
 
   // Show progress panel
   let panel = document.getElementById('scanProgress-' + id);
@@ -909,7 +909,7 @@ function scanOne(id) {
       card.appendChild(panel);
     }
   }
-  if (panel) panel.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Connecting…';
+  if (panel) panel.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Connectingâ€¦';
 
   const es = new EventSource(`/api/user/products/${id}/scan-stream`, { withCredentials: true });
 
@@ -917,16 +917,16 @@ function scanOne(id) {
     const d = JSON.parse(e.data);
 
     if (d.type === 'start') {
-      if (panel) panel.innerHTML = `<b>Scanning ${d.total} sites…</b><br>` +
-        d.sites.map(s => `<span id="sp-${id}-${s.replace(/\W/g,'_')}" style="color:#888">⏳ ${s}</span>`).join('<br>');
+      if (panel) panel.innerHTML = `<b>Scanning ${d.total} sitesâ€¦</b><br>` +
+        d.sites.map(s => `<span id="sp-${id}-${s.replace(/\W/g,'_')}" style="color:#888">â³ ${s}</span>`).join('<br>');
     }
 
     else if (d.type === 'progress') {
       const key = d.site.replace(/\W/g,'_');
       const el = document.getElementById(`sp-${id}-${key}`);
       if (el) {
-        const icon = d.status === 'found' ? '✅' : '❌';
-        const priceStr = (d.price && d.price !== 'N/A') ? ` — <b style="color:var(--green)">${d.price}</b>` : ' — not found';
+        const icon = d.status === 'found' ? 'âœ…' : 'âŒ';
+        const priceStr = (d.price && d.price !== 'N/A') ? ` â€” <b style="color:var(--green)">${d.price}</b>` : ' â€” not found';
         el.style.color = d.status === 'found' ? '#ccc' : '#555';
         el.innerHTML = `${icon} ${d.site}${priceStr}`;
       }
@@ -943,7 +943,7 @@ function scanOne(id) {
     else if (d.type === 'error') {
       es.close();
       if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-rotate-right"></i> Scan'; }
-      if (panel) panel.innerHTML = `<span style="color:var(--red)">❌ ${d.msg}</span>`;
+      if (panel) panel.innerHTML = `<span style="color:var(--red)">âŒ ${d.msg}</span>`;
       toast('Scan error: ' + d.msg, 'err');
     }
   };
@@ -951,13 +951,13 @@ function scanOne(id) {
   es.onerror = () => {
     es.close();
     if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-rotate-right"></i> Scan'; }
-    if (panel) panel.innerHTML = '<span style="color:var(--red)">❌ Connection lost</span>';
+    if (panel) panel.innerHTML = '<span style="color:var(--red)">âŒ Connection lost</span>';
   };
 }
 
 async function runNow() {
   const btn = document.getElementById('runNowBtn');
-  btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Running…';
+  btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Runningâ€¦';
   try {
     const r = await fetch('/api/user/autoscan/run-now', { method:'POST', credentials:'include' }).then(r => r.json());
     toast(r.message || 'Scan started', r.success ? 'ok' : 'info');
@@ -1023,12 +1023,12 @@ async function refreshAutoScanStatus() {
     autoScanEnabled = s.enabled;
     document.getElementById('asToggle').checked = s.enabled;
     document.getElementById('asLabel').textContent = s.enabled ? `Every ${s.intervalHours}h` : 'Disabled';
-    document.getElementById('asStatInterval').textContent = s.enabled ? `${s.intervalHours}h` : '—';
-    document.getElementById('asStatLast').textContent = s.lastRun || '—';
+    document.getElementById('asStatInterval').textContent = s.enabled ? `${s.intervalHours}h` : 'â€”';
+    document.getElementById('asStatLast').textContent = s.lastRun || 'â€”';
     document.getElementById('asStatNext').textContent = s.enabled && s.lastRun
-      ? calcNext(s.lastRun, s.intervalHours) : '—';
+      ? calcNext(s.lastRun, s.intervalHours) : 'â€”';
     document.getElementById('statLastScan').textContent = s.lastRun
-      ? s.lastRun.split(',')[0] : '—';
+      ? s.lastRun.split(',')[0] : 'â€”';
 
     const progress = document.getElementById('scanProgress');
     if (s.running && s.progress && s.progress.total > 0) {
@@ -1051,7 +1051,7 @@ function calcNext(lastRun, hours) {
     const h = Math.floor(diff / 3600000);
     const m = Math.floor((diff % 3600000) / 60000);
     return h > 0 ? `in ${h}h ${m}m` : `in ${m}m`;
-  } catch(_) { return '—'; }
+  } catch(_) { return 'â€”'; }
 }
 
 // ============================================================
@@ -1142,7 +1142,7 @@ function alertItemHTML(a) {
       <div class="alert-icon info"><i class="fa-solid fa-rotate-right"></i></div>
       <div class="alert-body">
         <div class="alert-title">${esc(a.title||'Scan complete')}</div>
-        <div class="alert-meta">${esc(a.summary||'')} · ${esc(a.timestamp||'')}</div>
+        <div class="alert-meta">${esc(a.summary||'')} Â· ${esc(a.timestamp||'')}</div>
       </div>
     </div>`;
   }
@@ -1153,12 +1153,12 @@ function alertItemHTML(a) {
     </div>
     <div class="alert-body">
       <div class="alert-title">${esc(a.productName||a.title||'')}</div>
-      <div class="alert-meta">📍 ${esc(a.site||a.source||'')} · ${esc(a.timestamp||'')}</div>
+      <div class="alert-meta">ðŸ“ ${esc(a.site||a.source||'')} Â· ${esc(a.timestamp||'')}</div>
       ${a.oldPrice ? `<div class="alert-prices">
         <span class="old-price">${esc(a.oldPrice)}</span>
         <i class="fa-solid fa-arrow-right" style="color:var(--muted)"></i>
         <span class="${isDrop?'new-drop':'new-rise'}">${esc(a.newPrice)}</span>
-        <span class="pct-badge ${isDrop?'pct-drop':'pct-rise'}">${isDrop?'▼':'▲'} ${a.pct}%</span>
+        <span class="pct-badge ${isDrop?'pct-drop':'pct-rise'}">${isDrop?'â–¼':'â–²'} ${a.pct}%</span>
       </div>` : ''}
     </div>
   </div>`;
@@ -1307,3 +1307,4 @@ init();
 </script>
 </body>
 </html>
+

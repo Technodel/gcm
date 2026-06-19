@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TCM — Sign In</title>
+  <title>GCM â€” Sign In</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
@@ -69,8 +69,8 @@
 <body>
 <nav>
   <a href="/landing" class="nav-logo">
-    <div class="nav-logo-icon">📡</div>
-    <span class="nav-logo-text">TCM</span>
+    <div class="nav-logo-icon">ðŸ“¡</div>
+    <span class="nav-logo-text">GCM</span>
   </a>
   <div class="nav-links">
     <a href="/landing">Home</a>
@@ -80,9 +80,9 @@
 </nav>
 <div class="card">
   <div class="logo">
-    <div class="logo-icon">📡</div>
+    <div class="logo-icon">ðŸ“¡</div>
     <div class="logo-text">
-      <h1>TCM</h1>
+      <h1>GCM</h1>
       <p>Competitor Price Monitor</p>
     </div>
   </div>
@@ -109,7 +109,7 @@
       <label>Password</label>
       <div class="input-wrap">
         <i class="fa-solid fa-lock"></i>
-        <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password"
+        <input type="password" id="loginPass" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" autocomplete="current-password"
           onkeydown="if(event.key==='Enter')doLogin()">
       </div>
     </div>
@@ -172,7 +172,7 @@ async function doLogin() {
   const password = document.getElementById('loginPass').value;
   if (!username || !password) return showError('Enter username and password');
   const btn = document.getElementById('loginBtn');
-  btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Signing in…';
+  btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Signing inâ€¦';
   try {
     const r = await fetch('/api/auth/login', {
       method:'POST', credentials:'include',
@@ -181,7 +181,7 @@ async function doLogin() {
     }).then(r => r.json());
     if (r.error) { showError(r.error); return; }
     window.location.href = r.user.role === 'admin' ? '/admin' : '/';
-  } catch(e) { showError('Server error — try again'); }
+  } catch(e) { showError('Server error â€” try again'); }
   finally { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In'; }
 }
 
@@ -190,7 +190,7 @@ async function doSignup() {
   const password = document.getElementById('signupPass').value;
   if (!username || !password) return showError('Fill in all fields');
   const btn = document.getElementById('signupBtn');
-  btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting…';
+  btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submittingâ€¦';
   try {
     const r = await fetch('/api/auth/signup-request', {
       method:'POST',
@@ -201,9 +201,10 @@ async function doSignup() {
     showSuccess('Request submitted! An admin will review and activate your account.');
     document.getElementById('signupUser').value = '';
     document.getElementById('signupPass').value = '';
-  } catch(e) { showError('Server error — try again'); }
+  } catch(e) { showError('Server error â€” try again'); }
   finally { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Request'; }
 }
 </script>
 </body>
 </html>
+

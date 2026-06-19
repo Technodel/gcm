@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TCM Admin</title>
+  <title>GCM Admin</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -117,8 +117,8 @@
     th.sortable{cursor:pointer;user-select:none}
     th.sortable:hover{color:var(--accent)}
     th.sortable .sort-icon{margin-left:4px;opacity:.4;font-size:.7rem}
-    th.sortable.asc .sort-icon::after{content:'▲';opacity:1}
-    th.sortable.desc .sort-icon::after{content:'▼';opacity:1}
+    th.sortable.asc .sort-icon::after{content:'â–²';opacity:1}
+    th.sortable.desc .sort-icon::after{content:'â–¼';opacity:1}
     /* MISC */
     .empty-row td{text-align:center;color:var(--muted);padding:2.5rem!important}
     ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}
@@ -132,8 +132,8 @@
 <!-- SIDEBAR -->
 <div class="sidebar">
   <div class="sidebar-brand">
-    <h1>TCM Admin</h1>
-    <p>Technodel Competitor Monitor</p>
+    <h1>GCM Admin</h1>
+    <p>Galaxy Competitor Monitor</p>
   </div>
   <nav class="nav">
     <button class="nav-item active" onclick="showPage('requests')">
@@ -184,7 +184,7 @@
       <div class="panel-head">
         <h3><i class="fa-solid fa-list"></i> All Users</h3>
         <div style="display:flex;gap:8px">
-          <input type="text" id="userSearch" placeholder="Search…" oninput="filterUsers()"
+          <input type="text" id="userSearch" placeholder="Searchâ€¦" oninput="filterUsers()"
             style="max-width:180px;padding:7px 11px;font-size:.82rem">
           <button class="btn btn-ghost btn-sm" onclick="loadUsers()"><i class="fa-solid fa-rotate-right"></i></button>
         </div>
@@ -313,7 +313,7 @@
         <!-- Groq (Primary) -->
         <div class="form-row" style="align-items:end;margin-bottom:12px">
           <div class="form-group" style="margin:0;flex:1">
-            <label><strong style="color:var(--accent)">1. Groq</strong> <span style="color:var(--green);font-size:.75rem">PRIMARY</span> <span style="color:var(--muted);font-weight:400;text-transform:none">— Fastest, uses Llama 3.3 70B</span></label>
+            <label><strong style="color:var(--accent)">1. Groq</strong> <span style="color:var(--green);font-size:.75rem">PRIMARY</span> <span style="color:var(--muted);font-weight:400;text-transform:none">â€” Fastest, uses Llama 3.3 70B</span></label>
             <input type="password" id="groqApiKey" placeholder="gsk_...">
           </div>
           <button class="btn btn-primary btn-sm" onclick="saveProviderKey('groq')">
@@ -327,7 +327,7 @@
         <!-- DeepSeek (Secondary) -->
         <div class="form-row" style="align-items:end;margin-bottom:12px">
           <div class="form-group" style="margin:0;flex:1">
-            <label><strong style="color:var(--accent)">2. DeepSeek</strong> <span style="color:var(--orange);font-size:.75rem">FALLBACK</span> <span style="color:var(--muted);font-weight:400;text-transform:none">— DeepSeek-V3 model</span></label>
+            <label><strong style="color:var(--accent)">2. DeepSeek</strong> <span style="color:var(--orange);font-size:.75rem">FALLBACK</span> <span style="color:var(--muted);font-weight:400;text-transform:none">â€” DeepSeek-V3 model</span></label>
             <input type="password" id="deepseekApiKey" placeholder="sk-...">
           </div>
           <button class="btn btn-primary btn-sm" onclick="saveProviderKey('deepseek')">
@@ -341,7 +341,7 @@
         <!-- Gemini (Tertiary) -->
         <div class="form-row" style="align-items:end;margin-bottom:12px">
           <div class="form-group" style="margin:0;flex:1">
-            <label><strong style="color:var(--accent)">3. Gemini</strong> <span style="color:var(--orange);font-size:.75rem">FALLBACK</span> <span style="color:var(--muted);font-weight:400;text-transform:none">— Google Gemini 2.0 Flash</span></label>
+            <label><strong style="color:var(--accent)">3. Gemini</strong> <span style="color:var(--orange);font-size:.75rem">FALLBACK</span> <span style="color:var(--muted);font-weight:400;text-transform:none">â€” Google Gemini 2.0 Flash</span></label>
             <input type="password" id="geminiApiKey" placeholder="AIzaSy...">
           </div>
           <button class="btn btn-primary btn-sm" onclick="saveProviderKey('gemini')">
@@ -355,8 +355,8 @@
         <p style="margin-top:12px;font-size:.8rem;color:var(--muted)">
           <i class="fa-solid fa-circle-info"></i> 
           <strong>Auto-fallback:</strong> If Groq fails, automatically tries DeepSeek, then Gemini. 
-          Get keys from: <a href="https://console.groq.com" target="_blank" style="color:var(--accent)">Groq</a> • 
-          <a href="https://platform.deepseek.com" target="_blank" style="color:var(--accent)">DeepSeek</a> • 
+          Get keys from: <a href="https://console.groq.com" target="_blank" style="color:var(--accent)">Groq</a> â€¢ 
+          <a href="https://platform.deepseek.com" target="_blank" style="color:var(--accent)">DeepSeek</a> â€¢ 
           <a href="https://aistudio.google.com" target="_blank" style="color:var(--accent)">Gemini</a>
         </p>
       </div>
@@ -369,7 +369,7 @@
 <div class="modal" id="editUserModal">
   <div class="modal-box">
     <div class="modal-head">
-      <h2><i class="fa-solid fa-pen" style="color:var(--accent)"></i> Edit User — <span id="editUserName"></span></h2>
+      <h2><i class="fa-solid fa-pen" style="color:var(--accent)"></i> Edit User â€” <span id="editUserName"></span></h2>
       <button class="btn btn-ghost btn-sm" onclick="closeModal('editUserModal')"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="modal-body">
@@ -390,13 +390,13 @@
       <div class="form-row">
         <div class="form-group">
           <label>New Password <span style="color:var(--muted);text-transform:none;font-weight:400">(leave blank to keep current)</span></label>
-          <input type="password" id="editPassword" placeholder="••••••••">
+          <input type="password" id="editPassword" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
         </div>
       </div>
       <div class="form-row">
         <div class="form-group">
           <label>Notes</label>
-          <textarea id="editNotes" rows="2" placeholder="Internal notes…" style="resize:vertical"></textarea>
+          <textarea id="editNotes" rows="2" placeholder="Internal notesâ€¦" style="resize:vertical"></textarea>
         </div>
       </div>
     </div>
@@ -411,7 +411,7 @@
 <div class="modal" id="usageModal">
   <div class="modal-box" style="max-width:680px">
     <div class="modal-head">
-      <h2><i class="fa-solid fa-chart-line" style="color:var(--accent)"></i> Usage — <span id="usageUserName"></span></h2>
+      <h2><i class="fa-solid fa-chart-line" style="color:var(--accent)"></i> Usage â€” <span id="usageUserName"></span></h2>
       <button class="btn btn-ghost btn-sm" onclick="closeModal('usageModal')"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="modal-body">
@@ -776,7 +776,7 @@ async function adminSaveSettings() {
 
 // ============================================================
 // AI / Multi-Provider Key Management
-// Priority: Groq → DeepSeek → Gemini
+// Priority: Groq â†’ DeepSeek â†’ Gemini
 // ============================================================
 async function loadAISettings() {
   try {
@@ -789,10 +789,10 @@ async function loadAISettings() {
     if (active.length > 0) {
       const primary = active[0];
       const fallback = active.slice(1).join(', ') || 'none';
-      el.innerHTML = `<i class="fa-solid fa-check-circle" style="color:var(--green)"></i> <strong>AI configured</strong> — Primary: <b>${primary}</b>, Fallbacks: ${fallback}`;
+      el.innerHTML = `<i class="fa-solid fa-check-circle" style="color:var(--green)"></i> <strong>AI configured</strong> â€” Primary: <b>${primary}</b>, Fallbacks: ${fallback}`;
       el.style.background = 'rgba(34,197,94,.08)';
     } else {
-      el.innerHTML = '<i class="fa-solid fa-circle-info" style="color:var(--muted)"></i> <strong>No AI keys configured</strong> — Add API keys for AI-powered product validation';
+      el.innerHTML = '<i class="fa-solid fa-circle-info" style="color:var(--muted)"></i> <strong>No AI keys configured</strong> â€” Add API keys for AI-powered product validation';
       el.style.background = 'var(--panel2)';
     }
     
@@ -800,7 +800,7 @@ async function loadAISettings() {
     providers.forEach(p => {
       const input = document.getElementById(p.id + 'ApiKey');
       if (input && p.configured) {
-        input.placeholder = `✓ ${p.name} key configured`;
+        input.placeholder = `âœ“ ${p.name} key configured`;
       }
     });
   } catch(e) {
@@ -855,7 +855,7 @@ function esc(s) {
 }
 
 function fmtDate(d) {
-  if (!d) return '—';
+  if (!d) return 'â€”';
   try { return new Date(d).toLocaleString(); } catch(_) { return d; }
 }
 
@@ -904,4 +904,5 @@ init();
 </script>
 </body>
 </html>
+
 
